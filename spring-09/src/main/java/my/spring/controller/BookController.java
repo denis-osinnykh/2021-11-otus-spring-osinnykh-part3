@@ -2,15 +2,20 @@ package my.spring.controller;
 
 import lombok.RequiredArgsConstructor;
 import my.spring.repositories.BookRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@RequiredArgsConstructor
 @Controller
 public class BookController {
 
     private BookRepository repository;
+
+    @Autowired
+    public BookController(BookRepository repository) {
+        this.repository = repository;
+    }
 
     @GetMapping("/")
     public String listPage(Model model) {
