@@ -2,26 +2,22 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>List of all persons</title>
+    <title>Список книг</title>
     <style type="text/css">
         body {
             padding: 50px;
         }
 
-        .persons {
+        .books {
             border: 1px solid steelblue;
-            width: 300px;
+            width: auto;
             border-collapse: collapse;
         }
 
-        .persons tr td, th {
+        .books tr td, th {
             padding: 5px;
             border: 1px solid steelblue;
         }
-
-        /*.persons td:last-child, td:first-child {*/
-        /*    width: 50px;*/
-        /*}*/
 
         h3 {
             background-repeat: no-repeat;
@@ -35,7 +31,7 @@
 
 <h3>Книги:</h3>
 
-<table class="persons">
+<table class="books">
     <thead>
     <tr>
         <th>ID</th>
@@ -50,6 +46,12 @@
             <td th:text="${book.name}">Название книги по умолчанию</td>
             <td th:text="${book.author.name}">Автор книги по умолчанию</td>
             <td th:text="${book.genre.name}">Жанр книги по умолчанию</td>
+            <td>
+                <a th:href="@{/edit(id=${book.id})}" href="edit.html">Редактировать</a>
+            </td>
+            <td>
+                <a th:href="@{/delete(id=${book.id})}" href="list.html">Удалить</a>
+            </td>
         </tr>
     </tbody>
 </table>

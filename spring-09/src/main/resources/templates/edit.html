@@ -35,26 +35,37 @@
 </head>
 <body>
 
-<!-- Person edition -->
-<!--<form id="edit-form" action="edit.html" th:action="@{/edit(id=${person.id})}" th:method="post" th:object="${person}">-->
-<!--    <h3 th:text = "#{person-form-header}">Person Info:</h3>-->
+<h3>Редактирование книги</h3>
+<form action="edit.html" th:object="${bookDTO}" th:action="@{/edit(id=${bookDTO.id})}" th:method="post">
+    <div class="row">
+        <label for="id_input">ID:</label>
+        <input id="id_input" type="text" th:value="*{id}" readonly="readonly" value="1"/>
+    </div>
 
-<!--    <div class="row">-->
-<!--        <label for="id-input">ID:</label>-->
-<!--        <input id="id-input" type="text" readonly="readonly" th:value="*{id}" value="1"/>-->
-<!--    </div>-->
+    <div class="row">
+        <label for="name_input">Наименование:</label>
+        <input id="name_input" name="name" type="text" th:value="*{name}"/>
+    </div>
 
-<!--    <div class="row">-->
-<!--        <label for="person-name-input">Name:</label>-->
-<!--        <input id="person-name-input" name="name" type="text" th:value="*{name}" value="John Doe"/>-->
-<!--        <div class="errors" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Wrong person name error</div>-->
-<!--    </div>-->
+    <div class="row">
+        <label for="author_input">Автор:</label>
+        <select id="author_input" name="author">
+            <option th:each="author : ${bookDTO.allAuthors}" th:text="${author.name}" th:value="${author.id}">Имя автора</option>
+        </select>
+    </div>
 
-<!--    <div class="row">-->
-<!--        <button type="submit" th:text="#{save-button-caption}">Save</button>-->
-<!--        <a href="list.html" th:href="@{/}"><button type="button" th:text="#{cancel-button-caption}">Cancel</button></a>-->
-<!--    </div>-->
-<!--</form>-->
+    <div class="row">
+        <label for="genre_input">Жанр:</label>
+        <select id="genre_input" name="genre">
+            <option th:each="genre : ${bookDTO.allGenres}" th:text="${genre.name}" th:value="${genre.id}">Имя автора</option>
+        </select>
+    </div>
+
+    <div class="row">
+        <button type="submit">Сохранить</button>
+        <a href="list.html" th:href="@{/}"><button type="button">Отмена</button></a>
+    </div>
+</form>
 
 </body>
 </html>
