@@ -12,9 +12,11 @@ public interface BookService {
 
     BookDTO getBookById(long id);
 
+    BookDTO getNewBook();
+
     List<BookDTO> getAllBooks();
 
-    boolean addBook(String bookName, @Nullable long authorId, @Nullable long genreId);
+    boolean addBook(BookDTO bookDTO);
 
     boolean saveBook(BookDTO bookDTO);
 

@@ -35,4 +35,11 @@ public class MappingService {
         dto.setAllBookComments(commentServ.getAllCommentsByBookId(book.getId()));
         return dto;
     }
+
+    public BookDTO createNewBookDTO() {
+        BookDTO dto = new BookDTO();
+        dto.setAllAuthors(authorServ.getAllAuthors());
+        dto.setAllGenres(genreServ.getAllGenres());
+        return dto;
+    }
 }

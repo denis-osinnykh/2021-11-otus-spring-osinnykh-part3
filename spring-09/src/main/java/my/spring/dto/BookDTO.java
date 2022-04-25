@@ -1,6 +1,7 @@
 package my.spring.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import my.spring.domain.Author;
 import my.spring.domain.Book;
 import my.spring.domain.Comment;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class BookDTO {
     private long id;
 

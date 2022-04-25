@@ -30,17 +30,30 @@ public class BookController {
         return "edit";
     }
 
-    @GetMapping("/view")
-    public String viewPage(@RequestParam("id") long id, Model model) {
-        model.addAttribute("bookDTO", bookServ.getBookById(id));
-        return "view";
-    }
-
     @PostMapping("/edit")
     public String editBook(@ModelAttribute("book") BookDTO bookDTO,
                            BindingResult bindingResult, Model model) {
         bookServ.saveBook(bookDTO);
         return "redirect:/";
+    }
+
+    @GetMapping("/add")
+    public String addPage(Model model) {
+        model.addAttribute("bookDTO", bookServ.getNewBook());
+        return "add";
+    }
+
+    @PostMapping("/add")
+    public String addBook(@ModelAttribute("book") BookDTO bookDTO,
+                           BindingResult bindingResult, Model model) {
+        bookServ.addBook(bookDTO);
+        return "redirect:/";
+    }
+
+    @GetMapping("/view")
+    public String viewPage(@RequestParam("id") long id, Model model) {
+        model.addAttribute("bookDTO", bookServ.getBookById(id));
+        return "view";
     }
 
     @GetMapping("/delete")

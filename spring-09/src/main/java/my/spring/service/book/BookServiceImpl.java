@@ -43,6 +43,17 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    public BookDTO getNewBook() {
+        try {
+            BookDTO dto = ms.createNewBookDTO();
+            return dto;
+
+        } catch (Exception e) {
+            io.printString("Ошибка выполнения запроса! Книга не создана!\n " + e.getMessage(), null);
+            return null;
+        }
+    }
+
     @Transactional(readOnly = true)
     public List<BookDTO> getAllBooks() {
         try {
@@ -58,11 +69,9 @@ public class BookServiceImpl implements BookService {
     }
     //TODO добавление книги
     @Transactional
-    public boolean addBook(String bookName, long authorId, long genreId) {
+    public boolean addBook(BookDTO bookDTO) {
         try {
-            Author author = authorJpa.findAuthorById(authorId);
-            Genre genre = genreJpa.findGenreById(genreId);
-            Book newBook =  new Book(0, bookName, author, genre);
+            Book newBook =  new Book(0, bookDTO.getName(), bookDTO.getAuthor(), bookDTO.getGenre());
 
             bookJpa.save(newBook);
             return true;
