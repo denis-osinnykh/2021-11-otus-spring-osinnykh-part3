@@ -11,3 +11,4 @@ insert into book (name, author_id, genre_id) values ('Same book2', 2, 2);
 insert into book (name, author_id, genre_id) values ('Same book3', 1, 2);
 
 insert into comment (text, book_id) values ('Same comment', 1);
+insert into comment (text, book_id) values ('Same comment2', 1);

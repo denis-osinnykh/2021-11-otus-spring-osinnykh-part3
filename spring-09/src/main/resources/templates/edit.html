@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Edit person</title>
+    <title>Редактирование книги</title>
     <style type="text/css">
         body {
             padding: 50px;
@@ -50,14 +50,16 @@
     <div class="row">
         <label for="author_input">Автор:</label>
         <select id="author_input" name="author">
-            <option th:each="author : ${bookDTO.allAuthors}" th:text="${author.name}" th:value="${author.id}">Имя автора</option>
+            <option th:each="author : ${bookDTO.allAuthors}" th:text="${author.name}" th:value="${author.id}" th:if="${bookDTO.author.id == author.id}" selected>Имя автора</option>
+            <option th:each="author : ${bookDTO.allAuthors}" th:text="${author.name}" th:value="${author.id}" th:if="${bookDTO.author.id != author.id}">Имя автора</option>
         </select>
     </div>
 
     <div class="row">
         <label for="genre_input">Жанр:</label>
         <select id="genre_input" name="genre">
-            <option th:each="genre : ${bookDTO.allGenres}" th:text="${genre.name}" th:value="${genre.id}">Имя автора</option>
+            <option th:each="genre : ${bookDTO.allGenres}" th:text="${genre.name}" th:value="${genre.id}" th:if="${bookDTO.genre.id == genre.id}" selected>Жанр</option>
+            <option th:each="genre : ${bookDTO.allGenres}" th:text="${genre.name}" th:value="${genre.id}" th:if="${bookDTO.genre.id != genre.id}">Жанр</option>
         </select>
     </div>
 

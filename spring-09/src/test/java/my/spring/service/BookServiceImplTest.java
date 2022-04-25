@@ -78,7 +78,7 @@ public class BookServiceImplTest {
                 .willReturn(null);
         assertEquals(null, bs.getBookById(NOT_EXPECTED_BOOK_ID));
     }
-
+    //TODO добавить тесты для нового сохранения
     @Test
     @DisplayName("возвращать true при добавлении, если книга была добавлена")
     void shouldReturnTrueAfterAdding() {

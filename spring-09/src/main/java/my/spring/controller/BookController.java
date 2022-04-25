@@ -1,9 +1,7 @@
 package my.spring.controller;
 
 import my.spring.dto.BookDTO;
-import my.spring.repositories.AuthorRepository;
-import my.spring.repositories.BookRepository;
-import my.spring.repositories.GenreRepository;
+import my.spring.service.book.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,43 +11,41 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class BookController {
 
-    private BookRepository bookRep;
-    private AuthorRepository authorRep;
-    private GenreRepository genreRep;
+    private BookService bookServ;
 
     @Autowired
-    public BookController(BookRepository bookRep, AuthorRepository authorRep, GenreRepository genreRep) {
-        this.bookRep = bookRep;
-        this.authorRep = authorRep;
-        this.genreRep = genreRep;
+    public BookController(BookService bookServ) {
+        this.bookServ = bookServ;
     }
-
 
     @GetMapping("/")
     public String listPage(Model model) {
-        model.addAttribute("books", bookRep.findAll());
+        model.addAttribute("books", bookServ.getAllBooks());
         return "list";
     }
 
     @GetMapping("/edit")
     public String editPage(@RequestParam("id") long id, Model model) {
-        BookDTO dto = BookDTO.fromDomainObject(bookRep.getById(id));
-        dto.setAllAuthors(authorRep.findAll());
-        dto.setAllGenres(genreRep.findAll());
-        model.addAttribute("bookDTO", dto);
+        model.addAttribute("bookDTO", bookServ.getBookById(id));
         return "edit";
+    }
+
+    @GetMapping("/view")
+    public String viewPage(@RequestParam("id") long id, Model model) {
+        model.addAttribute("bookDTO", bookServ.getBookById(id));
+        return "view";
     }
 
     @PostMapping("/edit")
     public String editBook(@ModelAttribute("book") BookDTO bookDTO,
                            BindingResult bindingResult, Model model) {
-        bookRep.save(bookDTO.toDomainObject());
+        bookServ.saveBook(bookDTO);
         return "redirect:/";
     }
 
     @GetMapping("/delete")
     public String deleteBook(@RequestParam("id") long id) {
-        bookRep.deleteById(id);
+        bookServ.deleteBookById(id);
         return "redirect:/";
     }
 }
