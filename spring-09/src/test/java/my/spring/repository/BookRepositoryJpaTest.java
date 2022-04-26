@@ -36,9 +36,6 @@ public class BookRepositoryJpaTest {
     @Autowired
     private BookRepository jpa;
 
-    @Autowired
-    private TestEntityManager em;
-
     @Test
     @DisplayName("добавлять книгу корректно")
     void shouldAddBook() {

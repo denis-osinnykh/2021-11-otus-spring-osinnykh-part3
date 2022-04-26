@@ -47,13 +47,16 @@ public class BookServiceImplTest {
     private static final String NEW_BOOK_GENRE_NAME = "Test genre 2";
 
     @MockBean
-    private BookRepository bookJpa;
+    public BookRepository bookJpa;
     @MockBean
-    private AuthorRepository authorJpa;
+    public AuthorRepository authorJpa;
     @MockBean
-    private GenreRepository genreJpa;
+    public GenreRepository genreJpa;
+
     @Autowired
     private BookService bs;
+    @Autowired
+    private MappingService ms;
 
     @Test
     @DisplayName("возвращать количество книг")
@@ -78,7 +81,7 @@ public class BookServiceImplTest {
                 .willReturn(null);
         assertEquals(null, bs.getBookById(NOT_EXPECTED_BOOK_ID));
     }
-    //TODO добавить тесты для нового сохранения
+
     @Test
     @DisplayName("возвращать true при добавлении, если книга была добавлена")
     void shouldReturnTrueAfterAdding() {
@@ -91,8 +94,8 @@ public class BookServiceImplTest {
         given(this.genreJpa.findGenreById(EXPECTED_BOOK_GENRE_ID))
                 .willReturn(newGenre);
 
-        //boolean result = bs.addBook(NEW_BOOK_NAME, EXPECTED_BOOK_AUTHOR_ID, EXPECTED_BOOK_GENRE_ID);
-        //assertEquals(true, result);
+        boolean result = bs.addBook(ms.bookToBookDTO(newBook));
+        assertEquals(true, result);
     }
 
     @Test
@@ -116,11 +119,12 @@ public class BookServiceImplTest {
     void shouldReturnFalseAfterAdding() {
         Author notExpectedAuthor = new Author(NOT_EXPECTED_BOOK_AUTHOR_ID, NOT_EXPECTED_BOOK_AUTHOR_NAME);
         Genre notExpectedGenre = new Genre(NOT_EXPECTED_BOOK_GENRE_ID, NOT_EXPECTED_BOOK_GENRE_NAME);
+        Book newBook = new Book(NEW_BOOK_ID, NEW_BOOK_NAME, notExpectedAuthor, notExpectedGenre);
 
         doThrow(new EmptyResultDataAccessException(1)).when(this.authorJpa).findAuthorById(NOT_EXPECTED_BOOK_AUTHOR_ID);
 
-        //boolean result = bs.addBook(EXPECTED_BOOK_NAME, NOT_EXPECTED_BOOK_AUTHOR_ID, NOT_EXPECTED_BOOK_GENRE_ID);
-        //assertEquals(false, result);
+        boolean result = bs.addBook(ms.bookToBookDTO(newBook));
+        assertEquals(false, result);
     }
 
     @Test

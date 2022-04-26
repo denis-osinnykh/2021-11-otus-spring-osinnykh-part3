@@ -67,11 +67,13 @@ public class BookServiceImpl implements BookService {
             return null;
         }
     }
-    //TODO добавление книги
+
     @Transactional
     public boolean addBook(BookDTO bookDTO) {
         try {
-            Book newBook =  new Book(0, bookDTO.getName(), bookDTO.getAuthor(), bookDTO.getGenre());
+            Author author = authorJpa.findAuthorById(bookDTO.getAuthor().getId());
+            Genre genre = genreJpa.findGenreById(bookDTO.getGenre().getId());
+            Book newBook =  new Book(0, bookDTO.getName(), author, genre);
 
             bookJpa.save(newBook);
             return true;
