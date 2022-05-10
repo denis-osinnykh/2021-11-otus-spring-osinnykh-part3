@@ -5,7 +5,6 @@ import my.spring.domain.Book;
 import my.spring.domain.Comment;
 import my.spring.repositories.BookRepository;
 import my.spring.repositories.CommentRepository;
-import my.spring.service.InputOutputService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,14 +15,12 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentJpa;
     private final BookRepository bookJpa;
-    private final InputOutputService io;
 
     @Transactional(readOnly = true)
     public Comment getCommentById(long id) {
         try {
             return commentJpa.findCommentById(id);
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Комментарий не найден!\n " + e.getMessage(), null);
             return null;
         }
     }
@@ -33,7 +30,6 @@ public class CommentServiceImpl implements CommentService {
         try {
             return commentJpa.findAllByBookId(id);
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Комментарии не найдены!\n " + e.getMessage(), null);
             return null;
         }
     }
@@ -43,7 +39,6 @@ public class CommentServiceImpl implements CommentService {
         try {
             Book book = bookJpa.findBookById(bookId);
             if (book == null) {
-                io.printString("Ошибка выполнения запроса! Книга не найдена!\n ", null);
                 return false;
             }
             Comment newComment = new Comment(0, text, book);
@@ -51,7 +46,6 @@ public class CommentServiceImpl implements CommentService {
             commentJpa.save(newComment);
             return true;
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Комментарий не добавлен!\n " + e.getMessage(), null);
             return false;
         }
     }
@@ -61,7 +55,6 @@ public class CommentServiceImpl implements CommentService {
         try {
             Comment comment = commentJpa.findCommentById(commentId);
             if (comment == null) {
-                io.printString("Ошибка выполнения запроса! Комментарий не найден!\n ", null);
                 return false;
             }
 
@@ -69,7 +62,6 @@ public class CommentServiceImpl implements CommentService {
             commentJpa.save(comment);
             return true;
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Комментарий не добавлен!\n " + e.getMessage(), null);
             return false;
         }
     }
@@ -80,7 +72,6 @@ public class CommentServiceImpl implements CommentService {
             commentJpa.deleteById(id);
             return true;
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Комментарий не удален!\n " + e.getMessage(), null);
             return false;
         }
     }

@@ -7,8 +7,8 @@ import my.spring.domain.Genre;
 import my.spring.dto.BookDTO;
 import my.spring.repositories.AuthorRepository;
 import my.spring.repositories.BookRepository;
+import my.spring.repositories.CommentRepository;
 import my.spring.repositories.GenreRepository;
-import my.spring.service.InputOutputService;
 import my.spring.service.MappingService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +20,12 @@ import java.util.stream.Collectors;
 @Service
 public class BookServiceImpl implements BookService {
 
-    private final InputOutputService io;
+    //private final InputOutputService io;
     private final MappingService ms;
     private final BookRepository bookJpa;
     private final AuthorRepository authorJpa;
     private final GenreRepository genreJpa;
+    private final CommentRepository commentJpa;
 
     @Transactional(readOnly = true)
     public long getBooksCount() {
@@ -35,10 +36,11 @@ public class BookServiceImpl implements BookService {
     public BookDTO getBookById(long id) {
         try {
             BookDTO dto = ms.bookToBookDTO(bookJpa.findBookById(id));
+            dto.setAllBookComments(commentJpa.findAllByBookId(id));
             return dto;
 
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Книга не найдена!\n " + e.getMessage(), null);
+            //io.printString("Ошибка выполнения запроса! Книга не найдена!\n " + e.getMessage(), null);
             return null;
         }
     }
@@ -49,7 +51,7 @@ public class BookServiceImpl implements BookService {
             return dto;
 
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Книга не создана!\n " + e.getMessage(), null);
+            //io.printString("Ошибка выполнения запроса! Книга не создана!\n " + e.getMessage(), null);
             return null;
         }
     }
@@ -63,7 +65,7 @@ public class BookServiceImpl implements BookService {
             return dtos;
 
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Книги не найдены!\n " + e.getMessage(), null);
+            //io.printString("Ошибка выполнения запроса! Книги не найдены!\n " + e.getMessage(), null);
             return null;
         }
     }
@@ -78,7 +80,7 @@ public class BookServiceImpl implements BookService {
             bookJpa.save(newBook);
             return true;
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Книга не добавлена!\n " + e.getMessage(), null);
+            //io.printString("Ошибка выполнения запроса! Книга не добавлена!\n " + e.getMessage(), null);
             return false;
         }
     }
@@ -89,7 +91,7 @@ public class BookServiceImpl implements BookService {
             bookJpa.save(ms.bookDTOToBook(bookDTO));
             return true;
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Книга не добавлена!\n " + e.getMessage(), null);
+            //io.printString("Ошибка выполнения запроса! Книга не добавлена!\n " + e.getMessage(), null);
             return false;
         }
     }
@@ -100,7 +102,7 @@ public class BookServiceImpl implements BookService {
             bookJpa.updateNameById(bookName, id);
             return true;
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Книга не обновлена!\n " + e.getMessage(), null);
+            //io.printString("Ошибка выполнения запроса! Книга не обновлена!\n " + e.getMessage(), null);
             return false;
         }
     }
@@ -112,7 +114,7 @@ public class BookServiceImpl implements BookService {
             bookJpa.updateAuthorById(author, id);
             return true;
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Книга не обновлена!\n " + e.getMessage(), null);
+            //io.printString("Ошибка выполнения запроса! Книга не обновлена!\n " + e.getMessage(), null);
             return false;
         }
     }
@@ -124,7 +126,7 @@ public class BookServiceImpl implements BookService {
             bookJpa.updateGenreById(genre, id);
             return true;
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Книга не обновлена!\n " + e.getMessage(), null);
+            //io.printString("Ошибка выполнения запроса! Книга не обновлена!\n " + e.getMessage(), null);
             return false;
         }
     }
@@ -135,7 +137,7 @@ public class BookServiceImpl implements BookService {
             bookJpa.deleteById(id);
             return true;
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Книга не удалена!\n " + e.getMessage(), null);
+            //io.printString("Ошибка выполнения запроса! Книга не удалена!\n " + e.getMessage(), null);
             return false;
         }
     }

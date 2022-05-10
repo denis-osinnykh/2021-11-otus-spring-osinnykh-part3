@@ -3,7 +3,6 @@ package my.spring.service.author;
 import lombok.RequiredArgsConstructor;
 import my.spring.domain.Author;
 import my.spring.repositories.AuthorRepository;
-import my.spring.service.InputOutputService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,14 +12,12 @@ import java.util.List;
 @Service
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorJpa;
-    private final InputOutputService io;
 
     @Transactional(readOnly = true)
     public Author getAuthorById(long id) {
         try {
             return authorJpa.findAuthorById(id);
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Книга не найдена!\n " + e.getMessage(), null);
             return null;
         }
     }
@@ -30,7 +27,6 @@ public class AuthorServiceImpl implements AuthorService {
         try {
             return authorJpa.findAll();
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Книги не найдены!\n " + e.getMessage(), null);
             return null;
         }
     }
@@ -43,7 +39,6 @@ public class AuthorServiceImpl implements AuthorService {
             authorJpa.save(newAuthor);
             return true;
         } catch (Exception e) {
-            io.printString("Ошибка выполнения запроса! Комментарий не добавлен!\n " + e.getMessage(), null);
             return false;
         }
     }

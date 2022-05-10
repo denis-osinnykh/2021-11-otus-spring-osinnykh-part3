@@ -3,7 +3,6 @@ package my.spring.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import my.spring.domain.Author;
-import my.spring.domain.Book;
 import my.spring.domain.Comment;
 import my.spring.domain.Genre;
 
@@ -21,10 +20,6 @@ public class BookDTO {
     private Author author;
 
     private Genre genre;
-
-    private List<Author> allAuthors;
-
-    private List<Genre> allGenres;
 
     private List<Comment> allBookComments;
 

@@ -42,14 +42,14 @@
     <div class="row">
         <label for="author_input">Автор:</label>
         <select id="author_input" name="author">
-            <option th:each="author : ${bookDTO.allAuthors}" th:text="${author.name}" th:value="${author.id}">Имя автора</option>
+            <option th:each="author : ${allAuthors}" th:text="${author.name}" th:value="${author.id}">Имя автора</option>
         </select>
     </div>
 
     <div class="row">
         <label for="genre_input">Жанр:</label>
         <select id="genre_input" name="genre">
-            <option th:each="genre : ${bookDTO.allGenres}" th:text="${genre.name}" th:value="${genre.id}">Жанр</option>
+            <option th:each="genre : ${allGenres}" th:text="${genre.name}" th:value="${genre.id}">Жанр</option>
         </select>
     </div>
 
