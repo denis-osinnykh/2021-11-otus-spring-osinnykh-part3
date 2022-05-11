@@ -1,71 +1,63 @@
 package my.spring.controller;
 
+import lombok.RequiredArgsConstructor;
+import my.spring.domain.Author;
+import my.spring.domain.Comment;
+import my.spring.domain.Genre;
 import my.spring.dto.BookDTO;
 import my.spring.service.author.AuthorService;
 import my.spring.service.book.BookService;
+import my.spring.service.comment.CommentService;
 import my.spring.service.genre.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+
+@RequiredArgsConstructor
+@RestController
 public class BookController {
+    //TODO добавление книги
+    private final BookService bookServ;
+    private final AuthorService authorServ;
+    private final GenreService genreServ;
 
-    private BookService bookServ;
-    private AuthorService authorServ;
-    private GenreService genreServ;
-
-    @Autowired
-    public BookController(BookService bookServ, AuthorService authorServ, GenreService genreServ) {
-        this.bookServ = bookServ;
-        this.authorServ = authorServ;
-        this.genreServ = genreServ;
+    @GetMapping("/books")
+    public List<BookDTO> getAllBooks() {
+        return bookServ.getAllBooks();
     }
 
-    @GetMapping("/")
-    public String listPage(Model model) {
-        model.addAttribute("books", bookServ.getAllBooks());
-        return "list";
+    //TODO в отдельный контроллер
+    @GetMapping("/authors")
+    public List<Author> getAllAuthors() {
+        return authorServ.getAllAuthors();
     }
 
-    @GetMapping("/edit")
-    public String editPage(@RequestParam("id") long id, Model model) {
-        model.addAttribute("bookDTO", bookServ.getBookById(id));
-        model.addAttribute("allAuthors", authorServ.getAllAuthors());
-        model.addAttribute("allGenres", genreServ.getAllGenres());
-        return "edit";
+    //TODO в отдельный контроллер
+    @GetMapping("/genres")
+    public List<Genre> getAllGenres() {
+        return genreServ.getAllGenres();
     }
 
-    @PostMapping("/edit")
-    public String editBook(@ModelAttribute("book") BookDTO bookDTO) {
-        bookServ.saveBook(bookDTO);
-        return "redirect:/";
+    @GetMapping("/books/{id}")
+    public BookDTO getBook(@PathVariable("id") long id) {
+        return bookServ.getBookById(id);
     }
 
-    @GetMapping("/add")
-    public String addPage(Model model) {
-        model.addAttribute("bookDTO", bookServ.getNewBook());
-        model.addAttribute("allAuthors", authorServ.getAllAuthors());
-        model.addAttribute("allGenres", genreServ.getAllGenres());
-        return "add";
+    @GetMapping("/books/{id}/comments")
+    public List<Comment> getAllCommentsByBookId(@PathVariable("id") long id) {
+        return bookServ.getBookById(id).getAllBookComments();
     }
 
-    @PostMapping("/add")
-    public String addBook(@ModelAttribute("book") BookDTO bookDTO) {
-        bookServ.addBook(bookDTO);
-        return "redirect:/";
+    @PatchMapping("/books")
+    public boolean saveBook(@RequestBody BookDTO bookDTO) {
+        return bookServ.saveBook(bookDTO);
     }
 
-    @GetMapping("/view")
-    public String viewPage(@RequestParam("id") long id, Model model) {
-        model.addAttribute("bookDTO", bookServ.getBookById(id));
-        return "view";
-    }
-
-    @PostMapping("/delete")
-    public String deleteBook(@RequestParam("id") long id) {
-        bookServ.deleteBookById(id);
-        return "redirect:/";
+    @DeleteMapping("/books/{id}")
+    public boolean deleteBook(@PathVariable("id") long id) {
+        return bookServ.deleteBookById(id);
     }
 }
