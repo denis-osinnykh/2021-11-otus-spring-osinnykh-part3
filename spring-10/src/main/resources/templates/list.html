@@ -48,6 +48,8 @@
     </tbody>
 </table>
 
+<button class="row" onclick="showEditorBook()">Добавить</button>
+
 <div id="books_editor">
 </div>
 
@@ -77,21 +79,24 @@
     function showEditorBook(id) {
         $("#books_editor").html("")
 
-        $.get("/books/" + id).done(function (bookDTO) {
-            $("#books_editor").append(`
-                    <h3>Редактирование книги:</h3>
+        let title = 'Добавление книги:'
+        if (id != undefined)
+            title = 'Редактирование книги:'
+
+        $("#books_editor").append(`
+                    <h3>${title}</h3>
                     <div class="row">
                         <label for="id_input">ID:</label>
-                        <input id="id_input" type="text" readOnly="readOnly" value="${bookDTO.id}"/>
+                        <input id="id_input" type="text" readOnly="readOnly"/>
                     </div>
 
                     <div class="row">
                         <label for="name_input">Наименование:</label>
-                        <input id="name_input" type="text" value="${bookDTO.name}"/>
+                        <input id="name_input" type="text"/>
                     </div>
             `)
 
-            $("#books_editor").append(`
+        $("#books_editor").append(`
                 <div class="row">
                     <label for="author_input">Автор:</label>
                     <select id="author_input">
@@ -99,20 +104,15 @@
                 </div>
             `)
 
-            $.get("/authors").done(function (authors) {
-                authors.forEach(function(author) {
-                    if (author.id == bookDTO.author.id)
-                        $("#author_input").append(`
-                            <option value="${author.id}" selected>${author.name}</option>
-                        `)
-                    else
-                        $("#author_input").append(`
-                            <option value="${author.id}">${author.name}</option>
-                        `)
-                })
+        $.get("/authors").done(function (authors) {
+            authors.forEach(function(author) {
+                $("#author_input").append(`
+                    <option value="${author.id}" selected>${author.name}</option>
+                    `)
             })
+        })
 
-            $("#books_editor").append(`
+        $("#books_editor").append(`
                 <div class="row">
                     <label for="genre_input">Жанр:</label>
                     <select id="genre_input">
@@ -120,26 +120,29 @@
                 </div>
             `)
 
-            $.get("/genres").done(function (genres) {
-                genres.forEach(function(genre) {
-                    if (genre.id == bookDTO.genre.id)
-                        $("#genre_input").append(`
-                            <option value="${genre.id}" selected>${genre.name}</option>
-                        `)
-                    else
-                        $("#genre_input").append(`
-                            <option value="${genre.id}">${genre.name}</option>
-                        `)
-                })
+        $.get("/genres").done(function (genres) {
+            genres.forEach(function(genre) {
+                $("#genre_input").append(`
+                    <option value="${genre.id}" selected>${genre.name}</option>
+                    `)
             })
+        })
 
-            $("#books_editor").append(`
+        $("#books_editor").append(`
                 <div class="row">
                     <button onclick="saveBook()">Сохранить</button>
                     <button onclick="refreshPage()">Отмена</button>
                 </div>
             `)
-        })
+
+        if (id != undefined) {
+            $.get("/books/" + id).done(function (bookDTO) {
+                $('#id_input').val(bookDTO.id)
+                $('#name_input').val(bookDTO.name)
+                $('#author_input').val(bookDTO.author.id)
+                $('#genre_input').val(bookDTO.genre.id)
+            })
+        }
     }
 
     function showViewerBook(id) {
