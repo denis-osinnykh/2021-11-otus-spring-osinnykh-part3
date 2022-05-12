@@ -84,16 +84,23 @@
             title = 'Редактирование книги:'
 
         $("#books_editor").append(`
-                    <h3>${title}</h3>
+                <h3>${title}</h3>
+            `)
+
+        if (id != undefined) {
+            $("#books_editor").append(`
                     <div class="row">
                         <label for="id_input">ID:</label>
                         <input id="id_input" type="text" readOnly="readOnly"/>
                     </div>
+                `)
+        }
 
-                    <div class="row">
-                        <label for="name_input">Наименование:</label>
-                        <input id="name_input" type="text"/>
-                    </div>
+        $("#books_editor").append(`
+                <div class="row">
+                    <label for="name_input">Наименование:</label>
+                    <input id="name_input" type="text"/>
+                </div>
             `)
 
         $("#books_editor").append(`
@@ -129,20 +136,24 @@
         })
 
         $("#books_editor").append(`
-                <div class="row">
-                    <button onclick="saveBook()">Сохранить</button>
-                    <button onclick="refreshPage()">Отмена</button>
+                <div id="buttons" class="row">
                 </div>
             `)
 
         if (id != undefined) {
+            $('#buttons').append(`<button onclick="saveBook()">Сохранить</button>`)
+
             $.get("/books/" + id).done(function (bookDTO) {
                 $('#id_input').val(bookDTO.id)
                 $('#name_input').val(bookDTO.name)
                 $('#author_input').val(bookDTO.author.id)
                 $('#genre_input').val(bookDTO.genre.id)
             })
+        } else {
+            $('#buttons').append(`<button onclick="addBook()">Добавить</button>`)
         }
+
+        $('#buttons').append(`<button onclick="refreshPage()">Отмена</button>`)
     }
 
     function showViewerBook(id) {
@@ -212,6 +223,25 @@
             url: '/books',
             data: JSON.stringify({
                 id: $('#id_input')[0].value,
+                name: $('#name_input')[0].value,
+                author: { id: $('#author_input')[0].value },
+                genre: { id: $('#genre_input')[0].value }
+            }),
+            success: function () {
+                refreshPage()
+            }
+        })
+    }
+
+    function addBook() {
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            type: 'POST',
+            url: '/books',
+            data: JSON.stringify({
                 name: $('#name_input')[0].value,
                 author: { id: $('#author_input')[0].value },
                 genre: { id: $('#genre_input')[0].value }

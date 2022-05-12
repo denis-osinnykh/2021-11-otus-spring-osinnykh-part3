@@ -19,26 +19,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class BookController {
-    //TODO добавление книги
+
     private final BookService bookServ;
-    private final AuthorService authorServ;
-    private final GenreService genreServ;
 
     @GetMapping("/books")
     public List<BookDTO> getAllBooks() {
         return bookServ.getAllBooks();
-    }
-
-    //TODO в отдельный контроллер
-    @GetMapping("/authors")
-    public List<Author> getAllAuthors() {
-        return authorServ.getAllAuthors();
-    }
-
-    //TODO в отдельный контроллер
-    @GetMapping("/genres")
-    public List<Genre> getAllGenres() {
-        return genreServ.getAllGenres();
     }
 
     @GetMapping("/books/{id}")
@@ -54,6 +40,11 @@ public class BookController {
     @PatchMapping("/books")
     public boolean saveBook(@RequestBody BookDTO bookDTO) {
         return bookServ.saveBook(bookDTO);
+    }
+
+    @PostMapping("/books")
+    public boolean addBook(@RequestBody BookDTO bookDTO) {
+        return bookServ.addBook(bookDTO);
     }
 
     @DeleteMapping("/books/{id}")
