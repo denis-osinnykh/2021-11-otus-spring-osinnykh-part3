@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Список книг</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        #books_list {
+            border: 1px solid steelblue;
+            width: auto;
+            border-collapse: collapse;
+        }
+
+        #books_list tr td, th {
+            padding: 5px;
+            border: 1px solid steelblue;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        h3 {
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+    </style>
+    <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<h3>Книги:</h3>
+
+<table id="books_list">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Автор</th>
+        <th>Жанр</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<button class="row" onclick="showEditorBook()">Добавить</button>
+
+<div id="books_editor">
+</div>
+
+<script>
+    $.get("/books").done(function (books) {
+        books.forEach(function (book) {
+            $("tbody").append(`
+                <tr>
+                    <td>${book.id}</td>
+                    <td>${book.name}</td>
+                    <td>${book.author.name}</td>
+                    <td>${book.genre.name}</td>
+                    <td>
+                        <button onclick="showEditorBook(${book.id})">Редактировать</button>
+                    </td>
+                    <td>
+                        <button onclick="deleteBook(${book.id})">Удалить</button>
+                    </td>
+                    <td>
+                        <button onclick="showViewerBook(${book.id})">Просмотр</button>
+                    </td>
+                </tr>
+            `)
+        })
+    })
+
+    function showEditorBook(id) {
+        $("#books_editor").html("")
+
+        let title = 'Добавление книги:'
+        if (id != undefined)
+            title = 'Редактирование книги:'
+
+        $("#books_editor").append(`
+                <h3>${title}</h3>
+            `)
+
+        if (id != undefined) {
+            $("#books_editor").append(`
+                    <div class="row">
+                        <label for="id_input">ID:</label>
+                        <input id="id_input" type="text" readOnly="readOnly"/>
+                    </div>
+                `)
+        }
+
+        $("#books_editor").append(`
+                <div class="row">
+                    <label for="name_input">Наименование:</label>
+                    <input id="name_input" type="text"/>
+                </div>
+            `)
+
+        $("#books_editor").append(`
+                <div class="row">
+                    <label for="author_input">Автор:</label>
+                    <select id="author_input">
+                    </select>
+                </div>
+            `)
+
+        $.get("/authors").done(function (authors) {
+            authors.forEach(function(author) {
+                $("#author_input").append(`
+                    <option value="${author.id}" selected>${author.name}</option>
+                    `)
+            })
+        })
+
+        $("#books_editor").append(`
+                <div class="row">
+                    <label for="genre_input">Жанр:</label>
+                    <select id="genre_input">
+                    </select>
+                </div>
+            `)
+
+        $.get("/genres").done(function (genres) {
+            genres.forEach(function(genre) {
+                $("#genre_input").append(`
+                    <option value="${genre.id}" selected>${genre.name}</option>
+                    `)
+            })
+        })
+
+        $("#books_editor").append(`
+                <div id="buttons" class="row">
+                </div>
+            `)
+
+        if (id != undefined) {
+            $('#buttons').append(`<button onclick="saveBook()">Сохранить</button>`)
+
+            $.get("/books/" + id).done(function (bookDTO) {
+                $('#id_input').val(bookDTO.id)
+                $('#name_input').val(bookDTO.name)
+                $('#author_input').val(bookDTO.author.id)
+                $('#genre_input').val(bookDTO.genre.id)
+            })
+        } else {
+            $('#buttons').append(`<button onclick="addBook()">Добавить</button>`)
+        }
+
+        $('#buttons').append(`<button onclick="refreshPage()">Отмена</button>`)
+    }
+
+    function showViewerBook(id) {
+        $("#books_editor").html("")
+
+        $.get("/books/" + id).done(function (bookDTO) {
+            $("#books_editor").append(`
+                    <h3>Просмотр книги:</h3>
+                    <div class="row">
+                        <label for="id_input">ID:</label>
+                        <input id="id_input" type="text" readOnly="readOnly" value="${bookDTO.id}"/>
+                    </div>
+
+                    <div class="row">
+                        <label for="name_input">Наименование:</label>
+                        <input id="name_input" type="text" readOnly="readOnly" value="${bookDTO.name}"/>
+                    </div>
+
+                    <div class="row">
+                        <label for="author_input">Автор:</label>
+                        <input id="author_input" type="text" readonly="readonly" value="${bookDTO.author.name}"/>
+                    </div>
+
+                    <div class="row">
+                        <label for="genre_input">Жанр:</label>
+                        <input id="genre_input" type="text" readonly="readonly" value="${bookDTO.genre.name}"/>
+                    </div>
+            `)
+
+            $("#books_editor").append(`
+                <h4>Комментарии:</h4>
+                <div id="comments_list">
+                </div>
+            `)
+
+            //Я понимаю, что тут в bookDTO уже есть все комментарии книги. Просто хотел сделать rest-запрос за вложенной коллекцией.
+            $.get("/books/" + bookDTO.id + "/comments").done(function (comments) {
+                comments.forEach(function(comment) {
+                    $("#comments_list").append(`
+                        <div>
+                            <span>Код:</span>
+                            <span>${comment.id}</span>
+                            <span>Текст:</span>
+                            <span>${comment.text}</span>
+                        </div>
+                    `)
+                })
+            })
+
+            $("#books_editor").append(`
+                <div class="row">
+                    <button onclick="refreshPage()">Назад</button>
+                </div>
+            `)
+        })
+
+        $("#books_editor")[0].removeAttribute("is_empty")
+    }
+
+    function saveBook() {
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            type: 'PATCH',
+            url: '/books',
+            data: JSON.stringify({
+                id: $('#id_input')[0].value,
+                name: $('#name_input')[0].value,
+                author: { id: $('#author_input')[0].value },
+                genre: { id: $('#genre_input')[0].value }
+            }),
+            success: function () {
+                refreshPage()
+            }
+        })
+    }
+
+    function addBook() {
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            type: 'POST',
+            url: '/books',
+            data: JSON.stringify({
+                name: $('#name_input')[0].value,
+                author: { id: $('#author_input')[0].value },
+                genre: { id: $('#genre_input')[0].value }
+            }),
+            success: function () {
+                refreshPage()
+            }
+        })
+    }
+
+    function deleteBook(id) {
+        $.ajax({
+            type: 'DELETE',
+            url: '/books/' + id,
+            success: function () {
+                refreshPage()
+            }
+        })
+    }
+
+    function refreshPage() {
+        $(location).prop("href", "/")
+    }
+</script>
+
+</body>
+</html>
