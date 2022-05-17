@@ -1,17 +1,9 @@
 package my.spring.controller;
 
 import lombok.RequiredArgsConstructor;
-import my.spring.domain.Author;
 import my.spring.domain.Comment;
-import my.spring.domain.Genre;
 import my.spring.dto.BookDTO;
-import my.spring.service.author.AuthorService;
 import my.spring.service.book.BookService;
-import my.spring.service.comment.CommentService;
-import my.spring.service.genre.GenreService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,7 +40,7 @@ public class BookController {
     }
 
     @DeleteMapping("/books/{id}")
-    public boolean deleteBook(@PathVariable("id") long id) {
-        return bookServ.deleteBookById(id);
+    public void deleteBook(@PathVariable("id") long id) {
+        bookServ.deleteBookById(id);
     }
 }

@@ -19,15 +19,6 @@ public class BookPageController {
 
     @GetMapping("/")
     public String listPage(Model model) {
-        //model.addAttribute("books", bookServ.getAllBooks());
         return "list";
     }
-
-//    @GetMapping("/edit")
-//    public String editPage(@RequestParam("id") long id, Model model) {
-//        model.addAttribute("bookDTO", bookServ.getBookById(id));
-//        model.addAttribute("allAuthors", authorServ.getAllAuthors());
-//        model.addAttribute("allGenres", genreServ.getAllGenres());
-//        return "edit";
-//    }
 }

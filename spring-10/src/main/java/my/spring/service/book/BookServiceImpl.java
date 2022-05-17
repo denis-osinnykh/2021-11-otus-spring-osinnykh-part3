@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @Service
 public class BookServiceImpl implements BookService {
 
-    //private final InputOutputService io;
     private final MappingService ms;
     private final BookRepository bookJpa;
     private final AuthorRepository authorJpa;
@@ -40,7 +39,6 @@ public class BookServiceImpl implements BookService {
             return dto;
 
         } catch (Exception e) {
-            //io.printString("Ошибка выполнения запроса! Книга не найдена!\n " + e.getMessage(), null);
             return null;
         }
     }
@@ -51,7 +49,6 @@ public class BookServiceImpl implements BookService {
             return dto;
 
         } catch (Exception e) {
-            //io.printString("Ошибка выполнения запроса! Книга не создана!\n " + e.getMessage(), null);
             return null;
         }
     }
@@ -65,7 +62,6 @@ public class BookServiceImpl implements BookService {
             return dtos;
 
         } catch (Exception e) {
-            //io.printString("Ошибка выполнения запроса! Книги не найдены!\n " + e.getMessage(), null);
             return null;
         }
     }
@@ -80,7 +76,6 @@ public class BookServiceImpl implements BookService {
             bookJpa.save(newBook);
             return true;
         } catch (Exception e) {
-            //io.printString("Ошибка выполнения запроса! Книга не добавлена!\n " + e.getMessage(), null);
             return false;
         }
     }
@@ -91,7 +86,6 @@ public class BookServiceImpl implements BookService {
             bookJpa.save(ms.bookDTOToBook(bookDTO));
             return true;
         } catch (Exception e) {
-            //io.printString("Ошибка выполнения запроса! Книга не добавлена!\n " + e.getMessage(), null);
             return false;
         }
     }
@@ -102,7 +96,6 @@ public class BookServiceImpl implements BookService {
             bookJpa.updateNameById(bookName, id);
             return true;
         } catch (Exception e) {
-            //io.printString("Ошибка выполнения запроса! Книга не обновлена!\n " + e.getMessage(), null);
             return false;
         }
     }
@@ -114,7 +107,6 @@ public class BookServiceImpl implements BookService {
             bookJpa.updateAuthorById(author, id);
             return true;
         } catch (Exception e) {
-            //io.printString("Ошибка выполнения запроса! Книга не обновлена!\n " + e.getMessage(), null);
             return false;
         }
     }
@@ -126,7 +118,6 @@ public class BookServiceImpl implements BookService {
             bookJpa.updateGenreById(genre, id);
             return true;
         } catch (Exception e) {
-            //io.printString("Ошибка выполнения запроса! Книга не обновлена!\n " + e.getMessage(), null);
             return false;
         }
     }
@@ -137,7 +128,6 @@ public class BookServiceImpl implements BookService {
             bookJpa.deleteById(id);
             return true;
         } catch (Exception e) {
-            //io.printString("Ошибка выполнения запроса! Книга не удалена!\n " + e.getMessage(), null);
             return false;
         }
     }

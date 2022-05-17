@@ -29,4 +29,12 @@ public class BookDTO {
         this.author = author;
         this.genre = genre;
     }
+
+    public BookDTO(long id, String name, Author author, Genre genre, List<Comment> comments) {
+        this.id = id;
+        this.name = name;
+        this.author = author;
+        this.genre = genre;
+        this.allBookComments = comments;
+    }
 }
